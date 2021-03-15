@@ -28,7 +28,7 @@ public class RadioTest {
     public void pressNextButton() {
         Radio radio = new Radio();
 
-        radio.setCurrentStation(9);
+        radio.setCurrentStation(10);
         radio.nextStation();
         assertEquals(0, radio.getCurrentStation());
     }
@@ -39,7 +39,7 @@ public class RadioTest {
 
         radio.setCurrentStation(0);
         radio.prevStation();
-        assertEquals(9, radio.getCurrentStation());
+        assertEquals(10, radio.getCurrentStation());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class RadioTest {
         Radio radio = new Radio();
 
         radio.setCurrentStation(11);
-        assertEquals(9, radio.getCurrentStation());
+        assertEquals(10, radio.getCurrentStation());
     }
 
     @Test
@@ -80,9 +80,9 @@ public class RadioTest {
     public void volumeUpOverMax() {
         Radio radio = new Radio();
 
-        radio.setCurrentVolume(12);
+        radio.setCurrentVolume(102);
         radio.plusVolume();
-        assertEquals(10, radio.getCurrentVolume());
+        assertEquals(100 , radio.getCurrentVolume());
     }
 
     @Test
