@@ -1,96 +1,100 @@
 package ru.netology.domain;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RadioTest {
 
     @Test
-    public void changeNextStation() {
-        Radio radio = new Radio();
-
-        radio.setCurrentStation(5);
-        radio.nextStation();
-        assertEquals(6, radio.getCurrentStation());
+    public void stationMax() {
+        int expected = 55;
+        Radio radio = new Radio(expected);
+        assertEquals(expected, radio.getLastStation());
     }
 
-    @Test
-    public void changePrevStation() {
-        Radio radio = new Radio();
+    @ParameterizedTest
+    @CsvSource({
+            "'Press from min', 10,0,0",
+            "'Press from ma[', 10,10,10",
+            "'Press more then max', 10, 15, 0",
+            "'Press less then min', 10, -10, 0"
 
-        radio.setCurrentStation(7);
-        radio.prevStation();
-        assertEquals(6, radio.getCurrentStation());
+    }
+    )
+
+    public void numberPressed(String name, int max, int numberPressed, int expected) {
+        Radio radio = new Radio(max);
+        radio.setCurrentStation(numberPressed);
+        int actual = radio.getCurrentStation();
+        assertEquals(expected, actual);
     }
 
-    @Test
-    public void pressNextButton() {
-        Radio radio = new Radio();
+    @ParameterizedTest
+    @CsvSource({
+            "'Press next from 0',10,0,1",
+            "'Press next from 5',10,5,6",
+            "'Press next from 9',10,9,10",
+            "'Press next from max',10,10,0"
+    }
+    )
 
-        radio.setCurrentStation(9);
-        radio.nextStation();
-        assertEquals(0, radio.getCurrentStation());
+    public void stationNumberNext(String name, int max, int currentNumber, int expected) {
+        Radio radio = new Radio(max);
+        radio.setCurrentStation(currentNumber);
+        radio.stationNumberNext();
+        int actual = radio.getCurrentStation();
+        assertEquals(expected, actual);
     }
 
-    @Test
-    public void pressPrevButton() {
-        Radio radio = new Radio();
+    @ParameterizedTest
+    @CsvSource({
+            "'Press prev from 0',10,0,10",
+            "'Press prev from 5',10,5,4",
+            "'Press prev from 9',10,9,8"
+    }
+    )
 
-        radio.setCurrentStation(0);
-        radio.prevStation();
-        assertEquals(9, radio.getCurrentStation());
+    public void stationNumberPrev(String name, int max, int currentStation, int expected) {
+        Radio radio = new Radio(max);
+        radio.setCurrentStation(currentStation);
+        radio.stationNumberPrev();
+        int actual = radio.getCurrentStation();
+        assertEquals(expected, actual);
     }
 
-    @Test
-    public void toSetStationNumberMin() {
-        Radio radio = new Radio();
 
-        radio.setCurrentStation(-6);
-        assertEquals(0, radio.getCurrentStation());
+    @ParameterizedTest
+    @CsvSource({
+            "'Press up from 0',0,1",
+            "'Press up from 50',50,51",
+            "'Press up from 100',100,100"
+    })
+
+    public void stationVolumeUp(String name, int currentVolume, int expected) {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(currentVolume);
+        radio.stationVolumeUp();
+        int actual = radio.getCurrentVolume();
+        assertEquals(expected, actual);
     }
 
-    @Test
-    public void toSetStationNumberMax() {
+    @ParameterizedTest
+    @CsvSource({
+            "'Press down from 0',0,0",
+            "'Press down from 5',50,49",
+            "'Press down from max', 100, 99",
+    }
+    )
+    public void stationVolumeDown(String name, int currentVolume, int expected) {
         Radio radio = new Radio();
-
-        radio.setCurrentStation(11);
-        assertEquals(9, radio.getCurrentStation());
+        radio.setCurrentVolume(currentVolume);
+        radio.stationVolumeDown();
+        int actual = radio.getCurrentVolume();
+        assertEquals(expected, actual);
     }
 
-    @Test
-    public void volumeUp() {
-        Radio radio = new Radio();
 
-        radio.setCurrentVolume(5);
-        radio.plusVolume();
-        assertEquals(6, radio.getCurrentVolume());
-    }
-
-    @Test
-    public void volumeDown() {
-        Radio radio = new Radio();
-
-        radio.setCurrentVolume(3);
-        radio.minusVolume();
-        assertEquals(2, radio.getCurrentVolume());
-    }
-
-    @Test
-    public void volumeUpOverMax() {
-        Radio radio = new Radio();
-
-        radio.setCurrentVolume(12);
-        radio.plusVolume();
-        assertEquals(10, radio.getCurrentVolume());
-    }
-
-    @Test
-    public void volumeDownUnderMin() {
-        Radio radio = new Radio();
-
-        radio.setCurrentVolume(-1);
-        radio.minusVolume();
-        assertEquals(0, radio.getCurrentVolume());
-    }
 }
